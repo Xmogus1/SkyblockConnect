@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="UltraRareTest" tests="6" skipped="0" failures="0" errors="0" timestamp="2026-07-26T14:00:30.031Z" hostname="TORNI-UKKO" time="0.016">
+  <properties/>
+  <testcase name="matches the mythological rares" classname="UltraRareTest" time="0.008"/>
+  <testcase name="does not match a word that merely starts with a listed term" classname="UltraRareTest" time="0.001"/>
+  <testcase name="matches slayer rares regardless of surrounding text" classname="UltraRareTest" time="0.001"/>
+  <testcase name="does not match ordinary drops" classname="UltraRareTest" time="0.001"/>
+  <testcase name="matches any dye" classname="UltraRareTest" time="0.0"/>
+  <testcase name="honours the user's extra terms" classname="UltraRareTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

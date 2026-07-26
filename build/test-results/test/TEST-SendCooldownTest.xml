@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="SendCooldownTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2026-07-26T14:00:30.024Z" hostname="TORNI-UKKO" time="0.003">
+  <properties/>
+  <testcase name="a blocked attempt does not push the cooldown back" classname="SendCooldownTest" time="0.001"/>
+  <testcase name="the first send goes through" classname="SendCooldownTest" time="0.0"/>
+  <testcase name="a second send within the minute is blocked" classname="SendCooldownTest" time="0.0"/>
+  <testcase name="sending is allowed again once the minute is up" classname="SendCooldownTest" time="0.0"/>
+  <testcase name="remaining time counts down" classname="SendCooldownTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

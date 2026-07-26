@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="MiningEventParserTest" tests="9" skipped="0" failures="0" errors="0" timestamp="2026-07-26T14:00:29.994Z" hostname="TORNI-UKKO" time="0.026">
+  <properties/>
+  <testcase name="reports known events under one spelling whatever case Hypixel used" classname="MiningEventParserTest" time="0.014"/>
+  <testcase name="finds a known event even when the wording is not the expected one" classname="MiningEventParserTest" time="0.002"/>
+  <testcase name="duration parsing covers the formats Hypixel uses" classname="MiningEventParserTest" time="0.001"/>
+  <testcase name="handles the other verbs and hour-long timers" classname="MiningEventParserTest" time="0.001"/>
+  <testcase name="a bar with no timer still yields the name" classname="MiningEventParserTest" time="0.0"/>
+  <testcase name="reads name and timer off an active event bar" classname="MiningEventParserTest" time="0.0"/>
+  <testcase name="ignores bars that are not mining events" classname="MiningEventParserTest" time="0.0"/>
+  <testcase name="formats durations for chat" classname="MiningEventParserTest" time="0.004"/>
+  <testcase name="an event name it has never heard of still parses" classname="MiningEventParserTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

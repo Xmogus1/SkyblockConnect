@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="AchievementScannerTest" tests="10" skipped="0" failures="0" errors="0" timestamp="2026-07-26T14:00:29.744Z" hostname="TORNI-UKKO" time="0.069">
+  <properties/>
+  <testcase name="standalone drops are unaffected" classname="AchievementScannerTest" time="0.048"/>
+  <testcase name="hoppity rabbit finds are detected for every rarity" classname="AchievementScannerTest" time="0.004"/>
+  <testcase name="skyblock level ups are detected" classname="AchievementScannerTest" time="0.0"/>
+  <testcase name="ordinary chatter is ignored" classname="AchievementScannerTest" time="0.001"/>
+  <testcase name="never reacts to its own output" classname="AchievementScannerTest" time="0.0"/>
+  <testcase name="a blank line closes the block" classname="AchievementScannerTest" time="0.001"/>
+  <testcase name="the block cannot outlive its backstops" classname="AchievementScannerTest" time="0.001"/>
+  <testcase name="an unindented line closes the block" classname="AchievementScannerTest" time="0.0"/>
+  <testcase name="rare rewards inside a chest still count" classname="AchievementScannerTest" time="0.001"/>
+  <testcase name="a real chest payout offers only the items" classname="AchievementScannerTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

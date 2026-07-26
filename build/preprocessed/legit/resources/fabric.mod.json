@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "id": "sbc",
+  "version": "1.0.0",
+  "name": "Skyblock Connect",
+  "description": "Share Hypixel SkyBlock server events and achievements between players.",
+  "authors": ["Xmoguz"],
+  "license": "CC0-1.0",
+  "icon": "assets/sbc/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "modmenu": [
+      "com.skyblockconnect.ui.clickgui.ModMenuIntegration"
+    ],
+    "client": [
+      {
+        "value": "com.skyblockconnect.SkyblockConnect",
+        "adapter": "kotlin"
+      }
+    ]
+  },
+  "mixins": [
+    "sbc.mixins.json"
+  ],
+  "accessWidener": "sbc.accesswidener",
+  "suggests": {
+    "hypixel-mod-api": "*"
+  },
+  "depends": {
+    "fabricloader": ">=0.17.3",
+    "minecraft": "26.1.2",
+    "java": ">=25",
+    "fabric-api": "*",
+    "fabric-language-kotlin": "*"
+  }
+}

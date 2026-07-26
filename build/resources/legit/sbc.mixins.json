@@ -1,0 +1,12 @@
+{
+  "required": true,
+  "package": "com.skyblockconnect.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "plugin": "com.skyblockconnect.init.AutoMixinDiscovery",
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "overwrites": {
+    "requireAnnotations": true
+  }
+}

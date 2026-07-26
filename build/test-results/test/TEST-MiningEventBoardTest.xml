@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="MiningEventBoardTest" tests="8" skipped="0" failures="0" errors="0" timestamp="2026-07-26T14:00:29.971Z" hostname="TORNI-UKKO" time="0.02">
+  <properties/>
+  <testcase name="your own lobby sorts first" classname="MiningEventBoardTest" time="0.01"/>
+  <testcase name="an empty board has no baseline" classname="MiningEventBoardTest" time="0.005"/>
+  <testcase name="expired events drop off" classname="MiningEventBoardTest" time="0.001"/>
+  <testcase name="baseline falls back to the most common event" classname="MiningEventBoardTest" time="0.001"/>
+  <testcase name="an event with no timer survives on the fallback lifetime" classname="MiningEventBoardTest" time="0.0"/>
+  <testcase name="baseline is your own event when SBC knows it" classname="MiningEventBoardTest" time="0.001"/>
+  <testcase name="a later report about the same lobby replaces the earlier one" classname="MiningEventBoardTest" time="0.0"/>
+  <testcase name="different lobbies are tracked separately" classname="MiningEventBoardTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
