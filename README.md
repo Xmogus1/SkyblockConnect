@@ -5,19 +5,19 @@ A social/common use Hypixel SkyBlock Fabric mod to share your progress with anyo
 Type `/sbc` to open the menu.
 
 ## What it does
-![menu1](https://i.imgur.com/g8ALoWA.png)
-![menu2](https://i.imgur.com/xH2CpwG.png)
-![menu3](https://i.imgur.com/Haqe7PN.png)
+![menu1](https://i.imgur.com/iAzs2XQ.png)
+![menu2](https://i.imgur.com/eBX3Vw5.png)
+![menu3](https://i.imgur.com/TfNUKoH.png)
 
 **Party finder** - `/sbc pf` lists your party with optional requirements, and
 lets people join with one click
 
-![party finder](https://i.imgur.com/dzt2jWG.png)
+![party finder](https://i.imgur.com/uSLLCcD.png)
 
 **Recent** - `/sbc recent` keeps the last 50 things that got shared so you can scroll back through them,
 with tabs and a search.
 
-![recent](https://i.imgur.com/kYLsdXN.png)
+![recent](https://i.imgur.com/VRYC2cK.png)
 
 ## Commands
 
