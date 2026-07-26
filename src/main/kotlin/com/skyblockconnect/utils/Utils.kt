@@ -1,0 +1,11 @@
+package com.skyblockconnect.utils
+
+import com.skyblockconnect.SkyblockConnect.mc
+import net.minecraft.network.protocol.Packet
+import java.awt.Color
+
+object Utils {
+    val favoriteColor = Color(0, 134, 255)
+
+    fun Packet<*>.send() = mc.connection?.send(this)
+}
