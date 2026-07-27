@@ -11,7 +11,9 @@ import com.skyblockconnect.ui.gui.RecentScreen
 import com.skyblockconnect.ui.gui.SbcScreen
 import com.skyblockconnect.ui.hud.HudEditorScreen
 import com.mojang.brigadier.arguments.IntegerArgumentType
+import com.mojang.brigadier.arguments.StringArgumentType
 import com.skyblockconnect.utils.ChatUtils
+import com.skyblockconnect.websocket.BlockList
 import com.skyblockconnect.websocket.SbcSocket
 
 object SbcCommand: BaseCommand("sbc", mutableSetOf("skyblockconnect")) {
@@ -22,6 +24,9 @@ object SbcCommand: BaseCommand("sbc", mutableSetOf("skyblockconnect")) {
         "/sbc recent" to "share history",
         "/sbc pf" to "find or list parties",
         "/sbc hud" to "Move the mining event HUD",
+        "/sbc block <player>" to "hide someone's shares",
+        "/sbc unblock <player>" to "unhide someone",
+        "/sbc blocks" to "list blocked players",
     )
 
     override fun CommandNodeBuilder.build() {
@@ -73,6 +78,34 @@ object SbcCommand: BaseCommand("sbc", mutableSetOf("skyblockconnect")) {
         literal("dismiss") {
             argument("id", IntegerArgumentType.integer(1)) {
                 runs { SharePrompt.dismiss(IntegerArgumentType.getInteger(it, "id")) }
+            }
+        }
+
+        literal("block") {
+            argument("player", StringArgumentType.word()) {
+                runs {
+                    val p = StringArgumentType.getString(it, "player")
+                    if (BlockList.block(p)) ChatUtils.modMessage("§7blocked §f$p§7, you won't see their shares")
+                    else ChatUtils.modMessage("§f$p §7is already blocked")
+                }
+            }
+        }
+
+        literal("unblock") {
+            argument("player", StringArgumentType.word()) {
+                runs {
+                    val p = StringArgumentType.getString(it, "player")
+                    if (BlockList.unblock(p)) ChatUtils.modMessage("§7unblocked §f$p")
+                    else ChatUtils.modMessage("§f$p §7is not blocked")
+                }
+            }
+        }
+
+        literal("blocks") {
+            runs {
+                val list = BlockList.names
+                if (list.isEmpty()) ChatUtils.modMessage("§7you haven't blocked anyone")
+                else ChatUtils.modMessage("§7blocked (§f${list.size}§7): §f${list.joinToString("§7, §f")}")
             }
         }
     }

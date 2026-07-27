@@ -84,6 +84,7 @@ object SbcNet {
 
     private fun handleEvent(json: JsonObject, fromSnapshot: Boolean = false) {
         val player = json.str("player")
+        if (BlockList.isBlocked(player)) return
         if (! Connection.showOwn.value && player != null && player.equals(selfName, true)) return
 
         when (json.str("kind")) {
@@ -106,6 +107,7 @@ object SbcNet {
 
     private fun handleAchievement(json: JsonObject) {
         val player = json.str("player") ?: return
+        if (BlockList.isBlocked(player)) return
         val text = json.str("text") ?: return
         val kind = AchievementKind.fromWire(json.str("kind")) ?: return
         if (! Connection.showOwn.value && player.equals(selfName, true)) return
@@ -117,6 +119,7 @@ object SbcNet {
         RecentFeed.clear()
         items.mapNotNull { it as? JsonObject }.forEach { o ->
             val player = o.str("player")
+            if (BlockList.isBlocked(player)) return@forEach
             when (o.str("type")) {
                 "sbc_event" -> when (o.str("kind")) {
                     "mining" -> MiningEvents.onRemoteEvent(
