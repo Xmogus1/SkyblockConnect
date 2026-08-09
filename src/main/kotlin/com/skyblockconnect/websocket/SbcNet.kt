@@ -75,6 +75,7 @@ object SbcNet {
             "pf_listings" -> handlePartyListings(json)
             "pf_join" -> json.str("joiner")?.let { PartyFinder.onJoinRequest(it) }
             "pf_join_denied" -> PartyFinder.onJoinDenied(json.str("reason") ?: "You don't meet this party's requirements.")
+            "update_required" -> handleUpdateRequired(json)
 
             "message" -> json.str("text")?.let { ChatUtils.chat(it) }
             "ping", "cosmetics", "admin_result" -> Unit
@@ -112,6 +113,23 @@ object SbcNet {
         val kind = AchievementKind.fromWire(json.str("kind")) ?: return
         if (! Connection.showOwn.value && player.equals(selfName, true)) return
         AchievementFeature.of(kind).onRemote(player, text)
+    }
+
+    private fun handleUpdateRequired(json: JsonObject) {
+        val latest = json.str("latest")
+        val url = json.str("url")
+        val line = net.minecraft.network.chat.Component.literal(
+            "§6§lSBC§r §cYour version is outdated" + (latest?.let { " §7(latest §f$it§7)" }.orEmpty()) + "§c. §7Please update."
+        )
+        if (url != null) {
+            line.append(net.minecraft.network.chat.Component.literal(" §b§n[Download]").withStyle(
+                net.minecraft.network.chat.Style.EMPTY
+                    .withClickEvent(net.minecraft.network.chat.ClickEvent.OpenUrl(java.net.URI.create(url)))
+                    .withHoverEvent(net.minecraft.network.chat.HoverEvent.ShowText(net.minecraft.network.chat.Component.literal("§a$url")))
+            ))
+        }
+        ChatUtils.chat(line)
+        SbcSocket.blockForUpdate()
     }
 
     private fun handleRecent(json: JsonObject) {

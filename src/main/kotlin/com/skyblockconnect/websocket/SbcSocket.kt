@@ -1,6 +1,7 @@
 package com.skyblockconnect.websocket
 
 import com.google.gson.JsonObject
+import com.skyblockconnect.SkyblockConnect.MOD_VERSION
 import com.skyblockconnect.SkyblockConnect.logger
 import com.skyblockconnect.SkyblockConnect.mc
 import com.skyblockconnect.features.impl.general.Connection
@@ -21,6 +22,7 @@ object SbcSocket {
 
     @Volatile private var socket: WebSocket? = null
     @Volatile private var wanted = false
+    @Volatile private var blocked = false
     private val connecting = AtomicBoolean(false)
 
     @Volatile var host: String? = null
@@ -52,8 +54,16 @@ object SbcSocket {
         return runCatching { ws.sendText(json.toString(), true) }.isSuccess
     }
 
+    /** The relay told us this version is outdated: stop reconnecting until the game restarts. */
+    fun blockForUpdate() {
+        blocked = true
+        runCatching { socket?.sendClose(WebSocket.NORMAL_CLOSURE, "update required") }
+        socket = null
+        host = null
+    }
+
     private fun connect() {
-        if (! wanted || ! connecting.compareAndSet(false, true)) return
+        if (! wanted || blocked || ! connecting.compareAndSet(false, true)) return
 
         val url = Connection.serverUrl.value.trim()
         val uri = runCatching { URI.create(url) }.getOrNull()
@@ -89,12 +99,13 @@ object SbcSocket {
             addProperty("type", "hello")
             addProperty("uuid", user.profileId.toString())
             addProperty("name", user.name)
+            addProperty("sbcVersion", MOD_VERSION)
         })
     }
 
     private fun scheduleRetry() {
-        if (! wanted) return
-        ThreadUtils.setTimeout(RETRY_DELAY_MS) { if (wanted && socket == null) connect() }
+        if (! wanted || blocked) return
+        ThreadUtils.setTimeout(RETRY_DELAY_MS) { if (wanted && ! blocked && socket == null) connect() }
     }
 
     private class SocketListener: WebSocket.Listener {

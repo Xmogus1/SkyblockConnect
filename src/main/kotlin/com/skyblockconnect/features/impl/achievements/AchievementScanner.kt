@@ -12,6 +12,13 @@ object AchievementScanner {
 
     private val chestNoise = Regex("(Essence\\s*x?[\\d,]*|\\bCoins\\b|^[=▬\\s-]*$)", RegexOption.IGNORE_CASE)
 
+    // Anything a player typed (public/party/guild/co-op/whisper) starts with a "name: " prefix. Real
+    // Hypixel milestones are system lines with no sender, so a leading chat prefix means it is fake.
+    private val playerChat = Regex(
+        "^(?:(?:Party|Guild|Officer|Co-op|G) > )?(?:From |To )?(?:\\[[^\\]]+\\] ?)*\\w{1,16}(?: \\[[^\\]]+\\])?: ",
+        RegexOption.IGNORE_CASE,
+    )
+
     private const val CHEST_MAX_MS = 10_000L
     private const val CHEST_MAX_ITEMS = 12
 
@@ -28,6 +35,7 @@ object AchievementScanner {
         }
 
         if (text.startsWith("SBC ")) return null
+        if (playerChat.containsMatchIn(text)) return null
 
         if (chestHeader.matches(text)) {
             chestOpen = true

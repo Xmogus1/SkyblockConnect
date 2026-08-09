@@ -100,6 +100,15 @@ class AchievementScannerTest {
     }
 
     @Test
+    fun `fake milestones typed in chat are ignored`() {
+        assertNull(scan("Player: Level 999 ➡ [1000]", inDungeon = false))
+        assertNull(scan("[MVP+] Griefer: SKILL LEVEL UP Combat 24 ➡ [25]", inDungeon = false))
+        assertNull(scan("Party > Troll: RARE DROP! Recombobulator 3000", inDungeon = false))
+        assertNull(scan("From Someone: HOPPITY'S HUNT You found Solomon (DIVINE)!", inDungeon = false))
+        assertNull(scan("Guild > [MVP++] Faker: Level 500 ➡ [501]", inDungeon = false))
+    }
+
+    @Test
     fun `standalone drops are unaffected`() {
         assertEquals(
             AchievementKind.RARE_DROP to "Potato (+156 Magic Find)",
