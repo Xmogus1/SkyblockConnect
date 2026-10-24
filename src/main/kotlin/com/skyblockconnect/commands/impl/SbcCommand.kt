@@ -5,6 +5,7 @@ import com.skyblockconnect.commands.BaseCommand
 import com.skyblockconnect.commands.CommandNodeBuilder
 import com.skyblockconnect.features.impl.achievements.SharePrompt
 import com.skyblockconnect.features.impl.general.Connection
+import com.skyblockconnect.features.impl.general.PartyChat
 import com.skyblockconnect.hypixel.HypixelApi
 import com.skyblockconnect.ui.gui.PartyFinderScreen
 import com.skyblockconnect.ui.gui.RecentScreen
@@ -19,6 +20,8 @@ import com.skyblockconnect.websocket.SbcSocket
 object SbcCommand: BaseCommand("sbc", mutableSetOf("skyblockconnect")) {
     private val help = mapOf(
         "/sbc" to "toggle stuff",
+        "/sbc chat [message]" to "party chat over the relay (no message = toggle on/off)",
+        "/wsc [message]" to "party chat (alias; no message = toggle)",
         "/sbc status" to "Relay connection status",
         "/sbc reconnect" to "Reconnect to the relay",
         "/sbc recent" to "share history",
@@ -37,6 +40,13 @@ object SbcCommand: BaseCommand("sbc", mutableSetOf("skyblockconnect")) {
                 val out = StringBuilder("§6§lSkyblock Connect§r\n")
                 help.forEach { (cmd, desc) -> out.append("§e$cmd §7- $desc\n") }
                 ChatUtils.chat(out.toString().trim())
+            }
+        }
+
+        literal("chat") {
+            runs { PartyChat.toggleFeature() }
+            argument("message", StringArgumentType.greedyString()) {
+                runs { PartyChat.send(StringArgumentType.getString(it, "message")) }
             }
         }
 

@@ -99,6 +99,7 @@ object SbcSocket {
             addProperty("type", "hello")
             addProperty("uuid", user.profileId.toString())
             addProperty("name", user.name)
+            addProperty("client", "sbc")
             addProperty("sbcVersion", MOD_VERSION)
         })
     }

@@ -72,6 +72,11 @@ object PartyFinder {
     private val transferred = Regex("The party was transferred to (\\w{1,16})", RegexOption.IGNORE_CASE)
     private val promoted = Regex("(\\w{1,16}) has promoted (\\w{1,16}) to Party Leader", RegexOption.IGNORE_CASE)
     private val invited = Regex("(\\w{1,16}) has invited you to join (?:their|the) party", RegexOption.IGNORE_CASE)
+    private val partyChatLine = Regex("^Party > (?:\\[[^\\]]+\\]\\s*)*(\\w{1,16}):", RegexOption.IGNORE_CASE)
+    private val partyListLabel = Regex("^Party (?:Leader|Moderators?|Members?)\\s*(?:\\([0-9]+\\))?\\s*:\\s*(.+)", RegexOption.IGNORE_CASE)
+    private val partyListEntry = Regex("^(?:\\[[^\\]]+\\]\\s*)+(\\w{3,16})\\b.*(?:\\(Leader\\)|\\(Moderator\\)|\\[Kick\\]|\\[Transfer\\]|\\[Promote\\]|\\[Demote\\])", RegexOption.IGNORE_CASE)
+    private val rankTag = Regex("\\[[^\\]]*\\]")
+    private val nameToken = Regex("[A-Za-z0-9_]{3,16}")
 
     fun init() {
         EventBus.register<TickEvent.Start> {
@@ -96,6 +101,19 @@ object PartyFinder {
         joinedParty.find(text)?.let { inParty = true; memberNames.clear(); memberNames += it.groupValues[1] }
         someoneJoined.find(text)?.let { inParty = true; memberNames += it.groupValues[1]; checkFull() }
         someoneLeft.find(text)?.let { memberNames -= it.groupValues[1] }
+        partyChatLine.find(text)?.let {
+            inParty = true
+            if (! it.groupValues[1].equals(SbcNet.selfName, true)) memberNames += it.groupValues[1]
+        }
+        partyListLabel.find(text)?.let { m ->
+            inParty = true
+            val rest = m.groupValues[1].replace(rankTag, " ")
+            nameToken.findAll(rest).forEach { if (! it.value.equals(SbcNet.selfName, true)) memberNames += it.value }
+        }
+        partyListEntry.find(text)?.let {
+            inParty = true
+            if (! it.groupValues[1].equals(SbcNet.selfName, true)) memberNames += it.groupValues[1]
+        }
 
         if (youLeft.containsMatchIn(text) || disbanded.containsMatchIn(text)) {
             inParty = false; memberNames.clear(); delistIfListed("you left the party")
@@ -145,6 +163,13 @@ object PartyFinder {
 
     private fun currentMembers(): List<String> =
         (listOf(SbcNet.selfName) + memberNames).distinctBy { it.lowercase() }
+
+    fun partyRecipients(): List<String> = memberNames.filterNot { it.equals(SbcNet.selfName, true) }.distinctBy { it.lowercase() }
+
+    fun hasPartyMembers(): Boolean = partyRecipients().isNotEmpty()
+
+    fun isPartyMember(name: String): Boolean =
+        name.equals(SbcNet.selfName, true) || memberNames.any { it.equals(name, true) }
 
     private fun pushListing() =
         SbcNet.sendPartyList(note.trim(), minLevel.coerceIn(0, 1000), reqsString(), slots.coerceIn(SLOTS_MIN, SLOTS_MAX), currentMembers())

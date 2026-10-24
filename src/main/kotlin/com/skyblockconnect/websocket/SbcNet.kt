@@ -52,6 +52,11 @@ object SbcNet {
         addProperty("target", target)
     }
 
+    fun sendChat(message: String, recipients: List<String>) = send("party_chat") {
+        addProperty("text", message)
+        add("to", com.google.gson.JsonArray().apply { recipients.forEach(::add) })
+    }
+
     private inline fun send(type: String, build: JsonObject.() -> Unit): Boolean {
         if (! SbcSocket.connected) return false
         val json = JsonObject()
@@ -76,6 +81,7 @@ object SbcNet {
             "pf_join" -> json.str("joiner")?.let { PartyFinder.onJoinRequest(it) }
             "pf_join_denied" -> PartyFinder.onJoinDenied(json.str("reason") ?: "You don't meet this party's requirements.")
             "update_required" -> handleUpdateRequired(json)
+            "party_chat" -> handleChat(json)
 
             "message" -> json.str("text")?.let { ChatUtils.chat(it) }
             "ping", "cosmetics", "admin_result" -> Unit
@@ -113,6 +119,13 @@ object SbcNet {
         val kind = AchievementKind.fromWire(json.str("kind")) ?: return
         if (! Connection.showOwn.value && player.equals(selfName, true)) return
         AchievementFeature.of(kind).onRemote(player, text)
+    }
+
+    private fun handleChat(json: JsonObject) {
+        val from = json.str("from") ?: return
+        if (BlockList.isBlocked(from)) return
+        val text = json.str("text") ?: return
+        com.skyblockconnect.features.impl.general.PartyChat.onRemote(from, json.str("fromUuid"), text)
     }
 
     private fun handleUpdateRequired(json: JsonObject) {

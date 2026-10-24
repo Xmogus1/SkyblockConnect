@@ -2,6 +2,7 @@ package com.skyblockconnect.mixin;
 
 import com.skyblockconnect.event.EventBus;
 import com.skyblockconnect.event.impl.MainThreadPacketReceivedEvent;
+import com.skyblockconnect.features.impl.general.PartyChat;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.minecraft.client.multiplayer.ClientPacketListener;
@@ -9,6 +10,8 @@ import net.minecraft.network.PacketListener;
 import net.minecraft.network.protocol.Packet;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ClientPacketListener.class)
 public class MixinClientPacketListener {
@@ -25,4 +28,17 @@ public class MixinClientPacketListener {
         EventBus.post(new MainThreadPacketReceivedEvent.Post(packet));
     }
 
+    @Inject(method = "sendChat", at = @At("HEAD"), cancellable = true)
+    private void onSendChat(String content, CallbackInfo ci) {
+        if (PartyChat.interceptOutgoing(content)) {
+            ci.cancel();
+        }
+    }
+
+    @Inject(method = "sendCommand", at = @At("HEAD"), cancellable = true)
+    private void onSendCommand(String command, CallbackInfo ci) {
+        if (PartyChat.interceptOutgoingCommand(command)) {
+            ci.cancel();
+        }
+    }
 }
